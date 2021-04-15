@@ -1,0 +1,40 @@
+#函数开始
+    .pos   0
+init:
+    irmovq stack,%rsp #设置栈指针
+    call main
+    halt
+#链表
+    .align 8
+ele1:
+    .quad 0x00a
+    .quad ele2
+ele2:
+    .quad 0x0b0
+    .quad ele3
+ele3:
+    .quad 0xc00
+    .quad 0
+
+main:
+    irmovq ele1,%rdi
+    call rsum_list
+    ret
+
+rsum_list:
+    pushq %rbx             #保存使用前的数据
+    xorq %rax,%rax         #val = 0;
+    andq %rdi,%rdi         #判断ls是否为零
+    je end                 #ls非零
+    mrmovq (%rdi),%rbx     #val = ls->val
+    mrmovq 8(%rdi),%rdi    #rest = rsum_list(ls->next);
+    call rsum_list
+    addq %rbx,%rax         #val + rest
+end:
+    popq %rbx              #恢复保存前的数据
+    ret
+
+#设置栈地址
+    .pos 0x100
+stack:
+

@@ -1,0 +1,55 @@
+#函数开始
+    .pos   0
+init:
+    irmovq stack,%rsp #设置栈指针
+    call main
+    halt
+
+#输入数据
+  .align 8
+# Source block
+src:
+  .quad 0x00a
+  .quad 0x0b0
+  .quad 0xc00
+# Destination block
+dest:
+  .quad 0x111
+  .quad 0x222
+  .quad 0x333
+
+main:
+    irmovq src,%rdi
+    irmovq dest,%rsi
+    irmovq $3,%rdx
+    call copy_block
+    ret
+
+copy_block:                  #long copy_block(long *src, long *dest, long len)
+    pushq %rbx               #用来保存val
+    pushq %r12
+    pushq %r13
+    xorq %rax,%rax           #result = 0
+    irmovq $8,%r12
+    irmovq $1,%r13
+loop:
+    andq %rdx,%rdx           #判断len是否大于0
+    jle end
+    mrmovq (%rdi),%rbx       #val = *src
+    rmmovq %rbx,%rdx         #dest = val
+    xorq %rbx,%rax           #result ^= val
+    addq %r12,%rdi           #src++
+    addq %r12,%rsi           #dest++
+    subq %r13,%rdx           #len--
+    jmp loop
+
+end:
+    popq %r13
+    popq %r12
+    popq %rbx
+    ret
+
+#设置栈地址
+    .pos 0x100
+stack:
+

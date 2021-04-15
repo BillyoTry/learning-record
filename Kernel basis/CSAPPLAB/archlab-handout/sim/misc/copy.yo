@@ -1,0 +1,55 @@
+                            | #函数开始
+0x000:                      |     .pos   0
+0x000:                      | init:
+0x000: 30f40001000000000000 |     irmovq stack,%rsp #设置栈指针
+0x00a: 804800000000000000   |     call main
+0x013: 00                   |     halt
+                            | 
+                            | #输入数据
+0x018:                      |   .align 8
+                            | # Source block
+0x018:                      | src:
+0x018: 0a00000000000000     |   .quad 0x00a
+0x020: b000000000000000     |   .quad 0x0b0
+0x028: 000c000000000000     |   .quad 0xc00
+                            | # Destination block
+0x030:                      | dest:
+0x030: 1101000000000000     |   .quad 0x111
+0x038: 2202000000000000     |   .quad 0x222
+0x040: 3303000000000000     |   .quad 0x333
+                            | 
+0x048:                      | main:
+0x048: 30f71800000000000000 |     irmovq src,%rdi
+0x052: 30f63000000000000000 |     irmovq dest,%rsi
+0x05c: 30f20300000000000000 |     irmovq $3,%rdx
+0x066: 807000000000000000   |     call copy_block
+0x06f: 90                   |     ret
+                            | 
+0x070:                      | copy_block:                  #long copy_block(long *src, long *dest, long len)
+0x070: a03f                 |     pushq %rbx               #用来保存val
+0x072: a0cf                 |     pushq %r12
+0x074: a0df                 |     pushq %r13
+0x076: 6300                 |     xorq %rax,%rax           #result = 0
+0x078: 30fc0800000000000000 |     irmovq $8,%r12
+0x082: 30fd0100000000000000 |     irmovq $1,%r13
+0x08c:                      | loop:
+0x08c: 6222                 |     andq %rdx,%rdx           #判断len是否大于0
+0x08e: 71bc00000000000000   |     jle end
+0x097: 50370000000000000000 |     mrmovq (%rdi),%rbx       #val = *src
+0x0a1: 403f0000000000000000 |     rmmovq %rbx,%rdx         #dest = val
+0x0ab: 6330                 |     xorq %rbx,%rax           #result ^= val
+0x0ad: 60c7                 |     addq %r12,%rdi           #src++
+0x0af: 60c6                 |     addq %r12,%rsi           #dest++
+0x0b1: 61d2                 |     subq %r13,%rdx           #len--
+0x0b3: 708c00000000000000   |     jmp loop
+                            | 
+0x0bc:                      | end:
+0x0bc: b0df                 |     popq %r13
+0x0be: b0cf                 |     popq %r12
+0x0c0: b03f                 |     popq %rbx
+0x0c2: 90                   |     ret
+                            | 
+                            | #设置栈地址
+0x100:                      |     .pos 0x100
+0x100:                      | stack:
+                            | 
