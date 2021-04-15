@@ -30,7 +30,7 @@
   1. 确定性有穷自动机(DFA)。从每一个状态只能发出一条具有某个符号的边，不存在ε（表示空）符号的边。
   2. 非确定性有穷自动机(NFA)。允许从一个状态发出多条具有相同符号的边，甚至允许发出标有ε（表示空）符号的边，即NFA可以不输入任何字符就自动沿ε边转换到下一个状态。
 
-  <a href='https://billyotry.github.io/2020/06/25/lexical%20scanner%20generated%20by%20flex/'>flex生成代码分析</a>
+  <a href='https://billyotry.github.io/2021/01/22/lexical%20scanner%20generated%20by%20flex/'>flex生成代码分析</a>
 
 - #### parser——语法分析
 
@@ -38,7 +38,7 @@
 
   语法分析的主要工作是构建一个AST抽象语法树
 
-  <a href='https://billyotry.github.io/2020/07/11/Understanding%20C%20parsers%20generated%20by%20GNU%20Bison/'>bison生成代码分析</a>
+  <a href='https://billyotry.github.io/2021/01/22/Understanding%20C%20parsers%20generated%20by%20GNU%20Bison/'>bison生成代码分析</a>
 
 - #### semant——语义分析
 
